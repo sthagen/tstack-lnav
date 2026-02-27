@@ -2459,7 +2459,9 @@ VALUES ('org.lnav.mouse-support', -1, DATETIME('now', '+1 minute'),
             if (lnav_data.ld_mode == ln_mode_t::FILES) {
                 if (lnav_data.ld_active_files.fc_other_files.empty()
                     && lnav_data.ld_active_files.fc_name_to_stubs->readAccess()
-                           ->empty())
+                           ->empty()
+                    && lnav_data.ld_view_stack.top().value()->get_inner_height()
+                        > 0)
                 {
                     log_info("%d: switching to paging!", loop_count);
                     set_view_mode(ln_mode_t::PAGING);

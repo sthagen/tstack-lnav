@@ -150,12 +150,15 @@ public:
 
     bool is_alive() const { return this->cp_child.has_value(); }
 
+    std::optional<int> get_exit_status() const { return this->cp_exit_status; }
+
 private:
     std::string cp_description;
     std::optional<std::string> cp_filename;
     std::optional<auto_pid<process_state::running>> cp_child;
     std::function<void(file_collection&, auto_pid<process_state::finished>&)>
         cp_finalizer;
+    std::optional<int> cp_exit_status;
 };
 
 struct file_collection {

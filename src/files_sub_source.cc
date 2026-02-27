@@ -621,11 +621,22 @@ files_sub_source::text_selection_changed(textview_curses& tc)
                 readline_shlex_highlighter(cmd_al, std::nullopt);
                 cmd_al.with_attr_for_all(
                     VC_ROLE.value(role_t::VCR_QUOTED_CODE));
-                details.emplace_back(attr_line_t()
-                                         .append("Child Command"_h3)
-                                         .right_justify(NAME_WIDTH)
-                                         .append(": ")
-                                         .append(cmd_al));
+                auto child_icon = ui_icon_t::ok;
+                if (open_opts.loo_child_poller->is_alive()) {
+                    child_icon = ui_icon_t::busy;
+                } else if (open_opts.loo_child_poller->get_exit_status()
+                               .value_or(0)
+                           != 0)
+                {
+                    child_icon = ui_icon_t::error;
+                }
+                details.emplace_back(
+                    attr_line_t()
+                        .append("Child Command"_h3)
+                        .right_justify(NAME_WIDTH)
+                        .append(": ")
+                        .append("  ", VC_ICON.value(child_icon))
+                        .append(cmd_al));
             }
             {
                 auto tf_opt = lf->get_text_format();

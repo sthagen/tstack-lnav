@@ -79,6 +79,7 @@ child_poller::poll(file_collection& fc)
             require(this->cp_finalizer);
 
             this->cp_finalizer(fc, finished);
+            this->cp_exit_status = finished.exit_status();
             return child_poll_result_t::FINISHED;
         });
 }
